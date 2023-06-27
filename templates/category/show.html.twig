@@ -27,4 +27,18 @@
     <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
 
     {{ include('category/_delete_form.html.twig') }}
+
+    <hr>
+
+    <b>Category's products</b>
+
+    <ul>
+        {% for product in category.products %}
+            <li>
+                [{{ product.id }}] {{ product.name }} (${{ product.price }}) :
+                <i>{{ product.description }}</i>
+            </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
