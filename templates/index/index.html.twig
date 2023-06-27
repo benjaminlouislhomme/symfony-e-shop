@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony eShop{% endblock %}
+
+{% block stylesheets %}
+  <style>
+
+    a {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: gray;
+      border-bottom: 2px solid gray;
+    }
+
+    img {
+      width: 50px;
+      height: auto;
+      border: 1px solid #ddd;
+    }
+
+  </style>
+
+{% endblock %}
+
+{% block body %}
+
+  <h1 class="text-center">Symfony eShop</h1>
+
+  <div
+    id="categories"
+    class="p-2 d-flex justify-content-evenly w-50 mx-auto"
+  >
+    <div>
+      <a href="." class="fs-5">ALL</a>
+    </div>
+
+    {% for category in categories %}
+      <div class="fs-5">
+        {% if (category.name == app.request.get('cat')) %}
+          <span class="text-secondary">
+            {{ category.name }}
+          </span>
+        {% else %}
+          <a href="?cat={{ category.name }}">
+            {{ category.name }}
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div id=products-list>
+    <table class="table table-striped">
+      <thead class="bg-dark text-light">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Image</th>
+          <th>Stock</th>
+          <th>Price</th>
+          <th>actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for product in products %}
+        <tr class="product-list-item">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td><img src="{{ product.image }}" /></td>
+          <td>{{ product.stock }}</td>
+          <td>{{ product.price }}</td>
+          <td>
+            <a
+              href="{{ path('app_product_show', {'id': product.id}) }}"
+              class="btn btn-sm btn-primary"
+            >
+              show
+            </a>
+            <a
+              href="{{ path('app_product_edit', {'id': product.id}) }}"
+              class="btn btn-sm btn-primary"
+            >
+              edit
+            </a>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="7">no records found</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <a href="{{ path('app_product_new') }}">Create new</a>
+{% endblock %}
