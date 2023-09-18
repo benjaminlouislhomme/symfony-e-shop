@@ -16,7 +16,10 @@ class CategoryControllerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(Category::class);
+        $this->repository = static::getContainer()
+                ->get('doctrine')
+                ->getRepository(Category::class)
+            ;
 
         foreach ($this->repository->findAll() as $object) {
             $this->repository->remove($object, true);
@@ -29,16 +32,14 @@ class CategoryControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('Category index');
-
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
     public function testNew(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
+        
         $this->client->request('GET', sprintf('%snew', $this->path));
 
         self::assertResponseStatusCodeSame(200);
@@ -55,7 +56,8 @@ class CategoryControllerTest extends WebTestCase
 
     public function testShow(): void
     {
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
+        
         $fixture = new Category();
         $fixture->setName('My Title');
         $fixture->setDescription('My Title');
@@ -66,13 +68,11 @@ class CategoryControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('Category');
-
-        // Use assertions to check that the properties are properly displayed.
     }
 
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
         $fixture = new Category();
         $fixture->setName('My Title');
         $fixture->setDescription('My Title');
@@ -96,7 +96,7 @@ class CategoryControllerTest extends WebTestCase
 
     public function testRemove(): void
     {
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
 
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
