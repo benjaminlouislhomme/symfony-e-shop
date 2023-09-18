@@ -16,7 +16,10 @@ class ProductControllerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(Product::class);
+        $this->repository = static::getContainer()
+                ->get('doctrine')
+                ->getRepository(Product::class)
+            ;
 
         foreach ($this->repository->findAll() as $object) {
             $this->repository->remove($object, true);
@@ -29,26 +32,24 @@ class ProductControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('Product index');
-
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
     public function testNew(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
+
         $this->client->request('GET', sprintf('%snew', $this->path));
 
         self::assertResponseStatusCodeSame(200);
 
         $this->client->submitForm('Save', [
-            'product[name]' => 'Testing',
-            'product[description]' => 'Testing',
-            'product[image]' => 'Testing',
-            'product[stock]' => 'Testing',
-            'product[price]' => 'Testing',
+            'product[name]' => 'My Name',
+            'product[description]' => 'My Description',
+            'product[image]' => 'my-image-url',
+            'product[stock]' => 10,
+            'product[price]' => 20.00,
         ]);
 
         self::assertResponseRedirects('/product/');
@@ -58,13 +59,14 @@ class ProductControllerTest extends WebTestCase
 
     public function testShow(): void
     {
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
+
         $fixture = new Product();
-        $fixture->setName('My Title');
-        $fixture->setDescription('My Title');
-        $fixture->setImage('My Title');
-        $fixture->setStock('My Title');
-        $fixture->setPrice('My Title');
+        $fixture->setName('My Name');
+        $fixture->setDescription('My Description');
+        $fixture->setImage('my-image-url');
+        $fixture->setStock(10);
+        $fixture->setPrice(20.00);
 
         $this->repository->save($fixture, true);
 
@@ -72,19 +74,18 @@ class ProductControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('Product');
-
-        // Use assertions to check that the properties are properly displayed.
     }
 
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
+
         $fixture = new Product();
-        $fixture->setName('My Title');
-        $fixture->setDescription('My Title');
-        $fixture->setImage('My Title');
-        $fixture->setStock('My Title');
-        $fixture->setPrice('My Title');
+        $fixture->setName('Something New');
+        $fixture->setDescription('Something New');
+        $fixture->setImage('my-image-new-url');
+        $fixture->setStock(10);
+        $fixture->setPrice(20.00);
 
         $this->repository->save($fixture, true);
 
@@ -93,9 +94,9 @@ class ProductControllerTest extends WebTestCase
         $this->client->submitForm('Update', [
             'product[name]' => 'Something New',
             'product[description]' => 'Something New',
-            'product[image]' => 'Something New',
-            'product[stock]' => 'Something New',
-            'product[price]' => 'Something New',
+            'product[image]' => 'my-image-new-url',
+            'product[stock]' => 15,
+            'product[price]' => 25.78,
         ]);
 
         self::assertResponseRedirects('/product/');
@@ -104,23 +105,23 @@ class ProductControllerTest extends WebTestCase
 
         self::assertSame('Something New', $fixture[0]->getName());
         self::assertSame('Something New', $fixture[0]->getDescription());
-        self::assertSame('Something New', $fixture[0]->getImage());
-        self::assertSame('Something New', $fixture[0]->getStock());
-        self::assertSame('Something New', $fixture[0]->getPrice());
+        self::assertSame('my-image-new-url', $fixture[0]->getImage());
+        self::assertSame(15, $fixture[0]->getStock());
+        self::assertSame('25.78', $fixture[0]->getPrice());
     }
 
     public function testRemove(): void
     {
-        $this->markTestIncomplete();
+        // $this->markTestIncomplete();
 
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
         $fixture = new Product();
-        $fixture->setName('My Title');
-        $fixture->setDescription('My Title');
-        $fixture->setImage('My Title');
-        $fixture->setStock('My Title');
-        $fixture->setPrice('My Title');
+        $fixture->setName('My Name');
+        $fixture->setDescription('My Description');
+        $fixture->setImage('my-image-url');
+        $fixture->setStock(10);
+        $fixture->setPrice(20.00);
 
         $this->repository->save($fixture, true);
 
